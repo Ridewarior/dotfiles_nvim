@@ -33,16 +33,30 @@ function M.configure()
     dap.set_breakpoint(vim.fn.input "Breakpoint condition: ")
   end, "Set Breakpoint")
 
-  dapui.setup {}
-  dap.listeners.after.event_initialized["dapui_config"] = function()
-    dapui.open()
-  end
-  dap.listeners.before.event_terminated["dapui_config"] = function()
-    dapui.close()
-  end
-  dap.listeners.before.event_exited["dapui_config"] = function()
-    dapui.close()
-  end
+  dapui.setup {
+    icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+    controls = {
+      icons = {
+        pause = '⏸',
+        play = '▶',
+        step_into = '⏎',
+        step_over = '⏭',
+        step_out = '⏮',
+        step_back = 'b',
+        run_last = '▶▶',
+        terminate = '⏹',
+        disconnect = '⏏',
+      },
+    },
+  }
+
+  -- Toggle to see last session result.
+  -- This is in case the session dies due unhandled exceptions
+  map('<F7>', dapui.toggle, 'See last session result.')
+
+  dap.listeners.after.event_initialized["dapui_config"] = dapui.open()
+  dap.listeners.before.event_terminated["dapui_config"] = dapui.close()
+  dap.listeners.before.event_exited["dapui_config"] = dapui.close()
 end
 
 return M
