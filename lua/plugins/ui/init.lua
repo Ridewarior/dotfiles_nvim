@@ -25,4 +25,12 @@ return {
     'nvim-lualine/lualine.nvim',
     config = statusline.configure,
   },
+
+  -- Visual Indent lines
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {},
+  },
+
 }

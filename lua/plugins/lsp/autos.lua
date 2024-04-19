@@ -59,7 +59,7 @@ function M.configure_completions()
       ["<CR>"] = cmp.mapping.confirm { select = true },
 
       -- Abort completions list
-      ["<C-e>"] = cmp.mapping.abort(),
+      ["<ESC>"] = cmp.mapping.abort(),
 
       -- Trigger completion
       --  Shouldn't need to do this often as cmp will display
