@@ -1,5 +1,6 @@
 local map = vim.keymap.set
 local silent = { silent = true }
+local helpers = require 'util.helpers'
 
 -- Get back to Netrw quickly
 -- map('n', '<leader>pv', vim.cmd.Ex)
@@ -51,7 +52,11 @@ map("x", "<leader>p", '"_dP', silent)
 map("n", "<leader>rp", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { desc = "Replace Word" })
 
 -- Move between diagnostic messages
-map("n", "]d", vim.diagnostic.goto_next, { desc = "Goto Next [D]iagnostic Message" })
-map("n", "[d", vim.diagnostic.goto_prev, { desc = "Goto Prev [D]iagnostic Message" })
+map('n', ']d', helpers.diagnostics_find(true), { desc = 'Goto Next [D]iagnostic Message' })
+map('n', ']e', helpers.diagnostics_find(true, 'ERROR'), { desc = 'Goto Next [E]rror Message' })
+map('n', ']w', helpers.diagnostics_find(true, 'WARNING'), { desc = 'Goto Next [W]arning Message' })
+map('n', '[d', helpers.diagnostics_find(false), { desc = "Goto Prev [D]iagnostic Message" })
+map('n', '[e', helpers.diagnostics_find(false, 'ERROR'), { desc = 'Goto Prev [E]rror Message' })
+map('n', '[w', helpers.diagnostics_find(false, 'WARNING'), { desc = 'Goto Prev [W]arning Message' })
 map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
