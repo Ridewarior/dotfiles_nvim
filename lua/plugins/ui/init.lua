@@ -33,4 +33,13 @@ return {
     opts = {},
   },
 
+  -- Code Context In Windowbar
+  {
+    'utilyre/barbecue.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'SmiteshP/nvim-navic'
+    },
+    config = true,
+  }
 }
