@@ -42,6 +42,8 @@ return {
     },
   },
   config = function(_, opts)
+    -- Prefer git instead of curl to improve connectivity in some envs
+    require('nvim-treesitter.install').prefer_git = true
     require('nvim-treesitter.configs').setup(opts)
   end,
 }
