@@ -1,5 +1,6 @@
 local mason = require 'plugins/lsp/mason'
 local autos = require 'plugins/lsp/autos'
+local linter = require 'plugins/lsp/linting'
 
 return {
   {
@@ -118,5 +119,12 @@ return {
   {
     "RRethy/nvim-treesitter-endwise",
     event = "InsertEnter",
+  },
+
+  -- Linting
+  {
+    'mfussenegger/nvim-lint',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = linter.configure,
   },
 }
