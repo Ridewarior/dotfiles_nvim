@@ -82,6 +82,14 @@ function M.configure()
           callback = vim.lsp.buf.clear_references,
         })
       end
+
+      -- Autocmd to toggle inlay hints for code
+      -- If the language servers in use supports them
+      if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+        map('n', '<leader>th', function()
+          vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+        end, '[T]oggle Inlay [H]ints')
+      end
     end,
   })
 

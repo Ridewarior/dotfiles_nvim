@@ -51,7 +51,7 @@ map("x", "<leader>p", '"_dP', silent)
 map("n", "<leader>rp", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { desc = "Replace Word" })
 
 -- Move between diagnostic messages
-map("n", "[d", vim.diagnostic.goto_next, { desc = "Goto Next [D]iagnostic Message" })
-map("n", "]d", vim.diagnostic.goto_prev, { desc = "Goto Prev [D]iagnostic Message" })
+map("n", "]d", vim.diagnostic.goto_next, { desc = "Goto Next [D]iagnostic Message" })
+map("n", "[d", vim.diagnostic.goto_prev, { desc = "Goto Prev [D]iagnostic Message" })
 map('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
