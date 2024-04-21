@@ -30,7 +30,7 @@ end
 function M.configure_completions()
   local cmp = require "cmp"
   local luasnip = require "luasnip"
-  local icons = require "lua.config.icons"
+  local my_icons = require "lua.config.icons"
 
   luasnip.config.setup {}
 
@@ -111,9 +111,9 @@ function M.configure_completions()
         }
         local duplicates_default = 0
         if max_width ~= 0 and #item.abbr > max_width then
-          item.abbr = string.sub(item.abbr, 1, max_width - 1) .. icons.ui.Ellipsis
+          item.abbr = string.sub(item.abbr, 1, max_width - 1) .. my_icons.ui.Ellipsis
         end
-        item.kind = icons.kind[item.kind]
+        item.kind = my_icons.kind[item.kind]
         item.menu = source_names[entry.source.name]
         item.dup = duplicates[entry.source.name] or duplicates_default
         return item

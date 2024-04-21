@@ -1,6 +1,6 @@
 local map = vim.keymap.set
 local silent = { silent = true }
-local helpers = require 'util.helpers'
+local helpers = require 'plugins.util.helpers'
 
 -- Get back to Netrw quickly
 -- map('n', '<leader>pv', vim.cmd.Ex)
