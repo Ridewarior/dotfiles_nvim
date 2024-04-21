@@ -76,10 +76,21 @@ return {
     opts = {},
   },
 
-  -- Tabs
+  -- Window Tabs
   {
     'echasnovski/mini.tabline',
     version = false,
     opts = {},
+  },
+
+  -- Easily tab out of pairs
+  {
+    'abecodes/tabout.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'hrsh7th/nvim-cmp',
+    },
+    config = true,
   }
 }
