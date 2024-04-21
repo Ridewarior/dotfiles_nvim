@@ -19,8 +19,21 @@ return {
       { "nvim-telescope/telescope-ui-select.nvim" },
       { "nvim-telescope/telescope-file-browser.nvim" },
       { "nvim-telescope/telescope-project.nvim" },
-      { "ahmedkhalf/project.nvim" },
+      {
+        "ahmedkhalf/project.nvim",
+        config = function()
+          require('project_nvim').setup {
+            detection_methods = { 'pattern', 'lsp' },
+            patterns = { '.git' },
+            ignore_lsp = { 'null-ls' },
+          }
+        end,
+      },
       { "cljoly/telescope-repo.nvim" },
+      {
+        "stevearc/aerial.nvim",
+        config = true,
+      }
     },
     config = telescope.configure,
   },
@@ -40,4 +53,3 @@ return {
     config = nvimtree.configure,
   },
 }
-
