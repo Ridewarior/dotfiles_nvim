@@ -5,6 +5,20 @@ function M.configure()
   local dapui = require 'dapui'
   local widgets = require 'dap.ui.widgets'
 
+  local function get_csharp_debugger()
+    -- local home = os.getenv 'HOME'
+    -- local debugger_loc = home .. '/.local/share/nvim/netcoredbg'
+    -- return debugger_loc
+    local mason_registry = require 'mason-registry'
+    local debugger = mason_registry.get_package 'netcoredbg'
+    return debugger:get_install_path() .. '/netcoredbg'
+  end
+
+  local function get_js_debugger()
+    local path = vim.fn.stdpath 'data'
+    return path .. '/lazy/vscode-js-debug'
+  end
+
   require('mason-nvim-dap').setup {
     -- makes bet effort to setup various debuggers
     -- with reasonable debug config
@@ -103,15 +117,119 @@ function M.configure()
     },
   }
 
-  -- Toggle to see last session result.
-  -- This is in case the session dies due unhandled exceptions
-  map('n', function()
-    dapui.toggle()
-  end, 'See last session results')
-
   dap.listeners.after.event_initialized['dapui_config'] = dapui.open()
   dap.listeners.before.event_terminated['dapui_config'] = dapui.close()
   dap.listeners.before.event_exited['dapui_config'] = dapui.close()
+
+  dap.configurations.cs = {
+    {
+      type = 'coreclr',
+      name = 'launch - netcoredbg',
+      request = 'launch',
+      program = function()
+        return vim.fn.input('Path to dll > ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+      end,
+    },
+  }
+  dap.adapters.coreclr = {
+    type = 'executable',
+    command = get_csharp_debugger(),
+    args = { '--interpreter=vscode' },
+  }
+  dap.adapters.netcoredbg = {
+    type = 'executable',
+    command = get_csharp_debugger(),
+    args = { '--interpreter=vscode' },
+  }
+
+  require('dap-vscode-js').setup {
+    node_path = 'node',
+    debugger_path = get_js_debugger(),
+    adapters = {
+      'pwa-node',
+      'pwa-chrome',
+      'pwa-msedge',
+      'node-terminal',
+      'pwa-extensionHost',
+    },
+  }
+
+  for _, language in ipairs { 'typescript', 'javascript' } do
+    require('dap').configurations[language] = {
+      {
+        type = 'pwa-node',
+        request = 'launch',
+        name = 'Launch file',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
+      },
+      {
+        type = 'pwa-node',
+        request = 'attach',
+        name = 'Attach',
+        processId = require('dap.utils').pick_process,
+        cwd = '${workspaceFolder}',
+      },
+      {
+        type = 'pwa-node',
+        request = 'launch',
+        name = 'Debug Jest Tests',
+        -- trace = true, -- include debugger info
+        runtimeExecutable = 'node',
+        runtimeArgs = {
+          './node_modules/jest/bin/jest.js',
+          '--runInBand',
+        },
+        rootPath = '${workspaceFolder}',
+        cwd = '${workspaceFolder}',
+        console = 'integratedTerminal',
+        internalConsoleOptions = 'neverOpen',
+      },
+      {
+        type = 'pwa-chrome',
+        name = 'Attach - Remote Debugging',
+        request = 'attach',
+        program = '${file}',
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = 'inspector',
+        port = 9222, -- Start Chrome google-chrome --remote-debugging-port=9222
+        webRoot = '${workspaceFolder}',
+      },
+      {
+        type = 'pwa-chrome',
+        name = 'Launch Chrome',
+        request = 'launch',
+        url = 'http://localhost:5173', -- This is for Vite. Change it to the framework you use
+        webRoot = '${workspaceFolder}',
+        userDataDir = '${workspaceFolder}/.vscode/vscode-chrome-debug-userdatadir',
+      },
+    }
+  end
+
+  for _, language in ipairs { 'typescriptreact', 'javascriptreact' } do
+    require('dap').configurations[language] = {
+      {
+        type = 'pwa-chrome',
+        name = 'Attach - Remote Debugging',
+        request = 'attach',
+        program = '${file}',
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = 'inspector',
+        port = 9222, -- Start Chrome google-chrome --remote-debugging-port=9222
+        webRoot = '${workspaceFolder}',
+      },
+      {
+        type = 'pwa-chrome',
+        name = 'Launch Chrome',
+        request = 'launch',
+        url = 'http://localhost:5173', -- This is for Vite. Change it to the framework you use
+        webRoot = '${workspaceFolder}',
+        userDataDir = '${workspaceFolder}/.vscode/vscode-chrome-debug-userdatadir',
+      },
+    }
+  end
 end
 
 return M
