@@ -11,20 +11,17 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
---  INFO: There are two things to remember for plugin configs
---  Full info can be found on the lazy.nvim repo: https://github.com/folke/lazy.nvim
---  1. `opts` is a table that will be passed into `Plugin.config(_, opts)`
---    It's common for plugins to ask for default/plugin configs to be passed in here
---  2. `config` is the function executed when the plugin loads.
---    To use the default implementation without `opts`, set `config` to `true`
-
 require('lazy').setup {
   spec = {
     { import = 'plugins' },
-    { import = 'plugins.extras.ui' },
   },
   install = {
     colorscheme = { 'tokyonight' }
+  },
+  checker = {
+    enabled = true,
+    notify = true,
+    frequency = 3600,
   },
   performance = {
     rtp = {
